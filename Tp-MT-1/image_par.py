@@ -5,26 +5,29 @@ from time import time
 from numba import jit, prange
 
 
+# @jit(nopython=True, parallel=True) # Para ejecución en Google Colab
 @jit(parallel=True)
 def convert_to_grayscale(image):
-    H, W, _ = image.shape # Obtener el ancho y alto de la imagen
-    gray = np.zeros((H, W), dtype=np.uint8) # Inicializar la matriz de la imagen en escala de grises
+    H, W, C = image.shape # Obtenemos Alto, Ancho y los Canales de color (para RGB = 3)
+    gray = np.zeros((H, W, C), dtype=np.uint8) # Inicializamos la matriz para la imagen en escala de grises
     for x in prange(H):
         for y in prange(W):
             r, g, b = image[x][y]
-            gray[x][y] = round((r+g+b)/3)
+            mean = round((r + g + b) / 3)
+            pixel = [mean, mean, mean]
+            gray[x][y] = pixel
     return gray
     
 
 if __name__ == '__main__':
     # Comentar y descomentar la línea correspondiente
-    # image_path = 'image_500x500.jpg'
-    image_path = 'image_2000x1000.jpg'
+    # image_path = '/image_500x500.jpg'
+    image_path = '/image_2000x1000.jpg'
     
-    image = Image.open(image_path) # Leer y almacenar la imagen
+    image = Image.open(image_path) # Leemos y almacenamos la imagen
     
     init = time()
-    image = np.array(image) # Convertir imagen en matriz (arreglo de arreglos)
+    image = np.array(image) # Convertimos imagen en matriz (arreglo de arreglos)
     gray = convert_to_grayscale(image)
     end = time() - init
 
