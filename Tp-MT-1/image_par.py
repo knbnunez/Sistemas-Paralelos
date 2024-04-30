@@ -6,7 +6,7 @@ from numba import jit, prange
 
 
 @jit(parallel=True)
-def convert_to_grayscale(image, gray):
+def convert_to_grayscale(image):
     H, W, _ = image.shape # Obtener el ancho y alto de la imagen
     gray = np.zeros((H, W), dtype=np.uint8) # Inicializar la matriz de la imagen en escala de grises
     for x in prange(H):
