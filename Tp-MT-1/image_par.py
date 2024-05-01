@@ -13,8 +13,8 @@ def convert_to_grayscale(image):
     for x in prange(H):
         for y in prange(W):
             r, g, b = image[x][y]
-            mean = round((r + g + b) / 3)
-            pixel = [mean, mean, mean]
+            mean = round((int(r) + int(g) + int(b)) / 3)
+            pixel = np.array([mean, mean, mean], dtype=np.uint8)
             gray[x][y] = pixel
     return gray
     
